@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -93,8 +93,8 @@ namespace Test
                     combinations_Body += String.Format("{0},{1},{2},{3}\n", dt, win, 0, segmentos.Count);
                         
 
-                    var f = String.Format("{3}/{0}_d_{1}_v_{2}_s_0_ALL.txt", FileName, dt, win, outputDirectory);
-                    var file0 = String.Format("{4}/{0}_d_{1}_v_{2}_s_{3}.txt", FileName, dt, win, 0, outputDirectory);
+                    var f = String.Format("{3}/{0}_d_{1:00}_v_{2:00}_s_00_ALL.txt", FileName, dt, win, outputDirectory);
+                    var file0 = String.Format("{4}/{0}_d_{1:00}_v_{2:00}_s_{3:00}.txt", FileName, dt, win, 0, outputDirectory);
                     WriteDown_Segments(segmentos, file0);
                     WriteDown_SegmentsInfo(segmentos, f);
 
@@ -108,7 +108,7 @@ namespace Test
                             segments_list = GetSegmentsList(segmentos);
                             combinations_Body += String.Format("{0},{1},{2},{3}\n", dt, win, perm, segmentos.Count);
 
-                            var file = String.Format("{4}/{0}_d_{1}_v_{2}_s_{3}.txt", FileName, dt, win, perm, outputDirectory);
+                            var file = String.Format("{4}/{0:00}_d_{1:00}_v_{2:00}_s_{3:00}.txt", FileName, dt, win, perm, outputDirectory);
                             WriteDown_Segments(segmentos, file);
 
                             //double t = segmentos.Sum(s => s.Distance);
