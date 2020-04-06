@@ -13,7 +13,7 @@ namespace TrackAnalyzer
 
 
         public string Name {get;set;}
-        public int ID { get; private set; }
+        public int ID { get; set; }
         public GeoLocation StartPoint 
         { 
             get 
@@ -48,7 +48,18 @@ namespace TrackAnalyzer
                 return 0;
             }
         }
-        public double PendientePromedio {get; private set; }
+        public double PendientePromedio
+        {
+            get 
+            {
+                if(Muestras != null) 
+                {
+                    double a = Muestras.Sum(m => m.Pendiente ) / Muestras.Count;
+                    return a;
+                }
+                return 0;
+            }
+        }
         public double PendienteBruta { get; private set; }
         public List<Muestra> Muestras { get; set;}
         public double ElevationGain { get; set;}

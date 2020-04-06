@@ -17,13 +17,18 @@ namespace TrackAnalyzer
             info = Get_SlopeChangesPositions(samples);
             info = Filter_SlopeChangesPositions(info, error);
          
+            int segment_id = 0;
+
             foreach(var t in info)
             {
                 segment = new Segmento();
                 var sub = samples.GetRange(t.Item1, t.Item2);
                 segment.Muestras.AddRange(sub);
+                segment.ID = segment_id;
 
                 segments.Add(segment);
+                
+                segment_id++;
             }
                         
             return segments;
