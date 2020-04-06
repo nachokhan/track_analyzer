@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -111,8 +111,8 @@ namespace Test
                             var file = String.Format("{4}/{0:00}_d_{1:00}_v_{2:00}_s_{3:00}.txt", FileName, dt, win, perm, outputDirectory);
                             WriteDown_Segments(segmentos, file);
 
-                            //double t = segmentos.Sum(s => s.Distance);
-                            //Console.WriteLine("Distancia: " + t + "km\n");
+                            double total_distance = segmentos.Sum(s => s.Distance);
+                            Console.WriteLine(file + " --- Distancia: " + total_distance + "km");
                         }
                     }
                 }
