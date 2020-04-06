@@ -111,8 +111,8 @@ namespace Test
                             var file = String.Format("{4}/{0}_d_{1}_v_{2}_s_{3}.txt", FileName, dt, win, perm, outputDirectory);
                             WriteDown_Segments(segmentos, file);
 
-                            double t = segmentos.Sum(s => s.Distance);
-                            Console.WriteLine("Distancia: " + t + "km\n");
+                            //double t = segmentos.Sum(s => s.Distance);
+                            //Console.WriteLine("Distancia: " + t + "km\n");
                         }
                     }
                 }
