@@ -8,15 +8,29 @@ namespace TrackAnalyzer
 {    
     public class TrackAnalyzer
     {
-        public static List<Segmento> Get_SegmentsFromSamples(List<Muestra> samples, int error = 0)
+        public static List<Segmento> Get_SegmentsFromSamples(List<Muestra> samples, double min_dist = 0)
         {
             List<Segmento> segments = new List<Segmento>();
-            Segmento segment;  
-            List<Tuple<int, int>> info;
 
-            info = Get_SlopeChangesPositions(samples);
-            info = Filter_SlopeChangesPositions(info, error);
-         
+            var info = Get_SlopeChangesPositions(samples);
+            info = Filter_SlopeChangesPositions(info);
+
+          
+           /* double dist = samples.Sum(m => m.Distancia);
+            min_dist = 0.00846 * dist;*/
+
+
+            segments = GetSegments_By_MetodoDeLasPendientesContrarias(samples, info, min_dist);
+
+                        
+            return segments;
+        }
+
+        private static List<Segmento> GetSegments_By_MetodoDeLaDistanciaMinima(List<Muestra> samples, List<Tuple<int, int>> info, double min_dist)
+        {
+            List<Segmento> segments = new List<Segmento>();
+            Segmento segment; 
+
             int segment_id = 0;
 
             foreach(var t in info)
@@ -25,16 +39,68 @@ namespace TrackAnalyzer
                 var sub = samples.GetRange(t.Item1, t.Item2);
                 segment.Muestras.AddRange(sub);
                 segment.ID = segment_id;
-
-                segments.Add(segment);
                 
-                segment_id++;
-            }
-                        
+                if(segment.Distance <= min_dist && segments.Count>0)
+                {
+                   segments.Last().Muestras.AddRange(sub);
+                }
+                else 
+                {
+                    segments.Add(segment);
+                    segment_id++;
+                }
+            }          
+
             return segments;
         }
 
-        private static List<Tuple<int, int>> Filter_SlopeChangesPositions(List<Tuple<int, int>> positions, int error)
+        private static List<Segmento> GetSegments_By_MetodoDeLasPendientesContrarias(List<Muestra> samples, List<Tuple<int, int>> info, double min_dist)
+        {
+            List<Segmento> segments = new List<Segmento>();
+            Segmento segment; 
+
+            int segment_id = 0;
+
+            // Get the slope of the first segment.            
+            var last_slope = (new Segmento() {Muestras = samples.GetRange(info[0].Item1, info[0].Item2)}).PendientePromedio;
+
+
+            foreach(var t in info)
+            {
+                segment = new Segmento();
+                var sub = samples.GetRange(t.Item1, t.Item2);
+                segment.Muestras = sub;               
+                
+                if(segments.Count > 0)
+                {
+                    if(Math.Sign(segment.PendientePromedio) != Math.Sign(last_slope))
+                    {
+                        if(segment.Distance <= min_dist)
+                        {
+                            segments.Last().Muestras.AddRange(sub);
+                        }
+                        else
+                        {
+                            last_slope = segment.PendientePromedio;
+                            segment.ID = ++segment_id;
+                            segments.Add(segment);
+                        }
+                    }
+                    else
+                    {
+                        segments.Last().Muestras.AddRange(sub);
+                    }
+                }
+                else
+                {
+                    segments.Add(segment);
+                }             
+            }
+
+            return segments;
+        }
+
+        private static List<Tuple<int, int>> Filter_SlopeChangesPositions(List<Tuple<int, int>> positions, double error=0)
         {
             List<Tuple<int, int>> new_positions = new List<Tuple<int, int>>();
 

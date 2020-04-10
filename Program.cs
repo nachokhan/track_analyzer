@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -16,16 +16,16 @@ namespace Test
         {
             Console.WriteLine("Hello World!");
 
-            double MIN_DT = 5;
-            double MAX_DT = 14;
-            int MIN_WIN = 5;
-            int MAX_WIN = 40;
-            int MIN_PERM = 5;
-            int MAX_PERM = 40;
-
-            double INC_DT = 4;
-            int INC_WIN = 4;
-            int INC_PERM = 6;
+            double MIN_DT = 4;
+            double MAX_DT = 10;
+            int MIN_WIN = 3;
+            int MAX_WIN = 6;
+            int MIN_PERM = 200;
+            int MAX_PERM = 500;
+   
+            double INC_DT = 2;
+            int INC_WIN = 2;
+            int INC_PERM = 50;
 
             var a = (int) (MAX_DT-MIN_DT)/INC_DT + 1 ;
             var b = (int) (MAX_WIN-MIN_WIN)/INC_WIN + 1;
@@ -33,7 +33,8 @@ namespace Test
 
             Console.WriteLine("Atención: Se generaran {0} archivos por TRACK", a*b*c+1);
 
-            HacerPruebas("rocas", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            //HacerPruebas("perilago", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            HacerPruebas("rincon1___", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
 
             //ProbarDistancias
 
@@ -67,7 +68,8 @@ namespace Test
             var a = gpxReader.Track.Name;
             Console.WriteLine("TRACK NAME: " + a);
 
-            
+            string visualizationFile;
+            string informationFile;
 
             int samples_01_initial = all_muestras.Count;
             int samples_02_withourDTs = 0;
@@ -92,8 +94,12 @@ namespace Test
                     var segments_list = GetSegmentsList(segmentos);
                     combinations_Body += String.Format("{0},{1},{2},{3}\n", dt, win, 0, segmentos.Count);
                         
+                    // GPX Visualizer
+                    visualizationFile = String.Format("{4}/_VIEW_d_{1:00}_v_{2:00}_s_{3:00}.txt", FileName, dt, win, 0, outputDirectory);
                     TrackFileSaver.WriteDown_SamplesForVisualize(segmentos, visualizationFile);                        
 
+                    // Excel ANALYSIS
+                    informationFile = String.Format("{3}/INFO_{1:00}_{2:00}_00.txt", FileName, dt, win, outputDirectory);                    
                     TrackFileSaver.WriteDown_SamplesInfo(segmentos, informationFile + "_SAMPLES");
                     TrackFileSaver.WriteDown_SegmentsInfo(segmentos, informationFile + "_SEGMENTS" );
 
@@ -107,15 +113,17 @@ namespace Test
                             segments_list = GetSegmentsList(segmentos);
                             combinations_Body += String.Format("{0},{1},{2},{3}\n", dt, win, perm, segmentos.Count);
 
+                            // GPX Visualizer
+                            visualizationFile = String.Format("{4}/VIEW_{1:00}_{2:00}_{3:00}.txt", FileName, dt, win, perm, outputDirectory);
                             TrackFileSaver.WriteDown_SamplesForVisualize(segmentos, visualizationFile);
                         }
                     }
                 }
             } 
 
-            var combinazions_text = combinations_Header + combinations_Body;
-            var combinations_file = String.Format("{1}/{0}_Combinations.txt", FileName, outputDirectory);
-            System.IO.File.WriteAllText(combinations_file, combinazions_text);
+            var combinations_text = combinations_Header + combinations_Body;
+            var combinations_file = String.Format("{0}/_Combinations.txt", outputDirectory);
+            System.IO.File.WriteAllText(combinations_file, combinations_text);
 
             Console.WriteLine("FIN at " + DateTime.Now.ToString() );
         }
@@ -149,7 +157,7 @@ namespace Test
             Console.WriteLine("DIST:\n---------\n{0}\n{1}\n{2}\n{3}\n", d1, d2, d3, d4);
         }
 
-
-
+           
+        
     }
 }
