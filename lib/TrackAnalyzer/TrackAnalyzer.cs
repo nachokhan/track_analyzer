@@ -16,7 +16,7 @@ namespace TrackAnalyzer
             info = Filter_SlopeChangesPositions(info);
 
           
-           /* double dist = samples.Sum(m => m.Distancia);
+          /*  double dist = samples.Sum(m => m.Distancia);
             min_dist = 0.00846 * dist;*/
 
 

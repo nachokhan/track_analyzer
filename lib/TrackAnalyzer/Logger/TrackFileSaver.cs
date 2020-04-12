@@ -1,11 +1,75 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
-namespace TrackAnalyzer
+namespace TrackAnalyzer.Logger
 {
     public class TrackFileSaver
     {
+
+        public static void WriteDown_CombinationSegments(CombinationsList combinations, string FileName)
+        {
+            string mainHeader = "SegID";
+            string secondHeader = ",{0}_I, {0}_F, {0}_Ct"; 
+            string mainBody = "{0}";
+            string secondBody = ",{0},{1},{2}";
+            string alphabet = "ABCEFHIKLNOQRTUWXZ";
+            string lastBody_01 = ", ,={0}";
+            string lastBody_02 = " ${0}${1}-{2}{3} + ${4}${5}-{6}{7} +";
+            string lastBody = "";
+
+            string totalHeader = "";
+            string totalBody = "";
+            string totalText = "";
+         
+            var ordered_list = combinations.Combinations.GroupBy(p => p.SegmentsCount).Select(p => p.ToList()).ToList();
+
+            foreach (List<SegmentsListCombination> combinationList in ordered_list)
+            {
+                int total_combinations = combinationList.Count;
+                int segments_count = combinationList[0].SegmentsCount;
+
+                totalHeader = mainHeader;
+                for(int cont=0; cont < segments_count; cont++)
+                    totalHeader += String.Format(secondHeader, cont);                
+
+                totalBody = "";
+                int actual_combination = 1;
+                foreach (SegmentsListCombination combination in combinationList)
+                {
+
+                    totalBody += String.Format(mainBody, combination.Name);
+                    
+                    lastBody = "";
+                    int alph_index = 1;
+                    actual_combination++;
+                    foreach(SegmentInfo segment in combination.Segments)
+                    {
+                        totalBody += String.Format(secondBody, segment.FirstSample, segment.LastSample, segment.SamplesCount);
+                        char letra1 = alphabet[alph_index++];
+                        char letra2 = alphabet[alph_index++];
+                        lastBody += string.Format(lastBody_02, 
+                            letra1, total_combinations+5, letra1, actual_combination, 
+                            letra2, total_combinations+5, letra2, actual_combination);
+                    }
+                    lastBody = lastBody.Remove(lastBody.Count()-1);
+                    lastBody = string.Format(lastBody_01, lastBody);
+                    totalBody += lastBody + "\n";
+                }
+                totalText += totalHeader + "\n" + totalBody + "\n\n\n";
+
+                // Ingresar PERFECTO
+                totalText += "\n";
+                totalText += totalHeader + "\n";
+                totalText += "\n\n";
+
+            }
+
+            System.IO.File.WriteAllText(FileName, totalText);
+
+        }
+
         public static void WriteDown_SamplesForVisualize(List<Segmento> segments, string fileName)
         {
             const string segmentHeader = "type,latitude,longitude,alt,name,color\n";
