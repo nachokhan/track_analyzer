@@ -17,7 +17,7 @@ namespace TrackAnalyzer
 
           
           /*  double dist = samples.Sum(m => m.Distancia);
-            min_dist = 0.00846 * dist;*/
+            min_dist = 0.0084 * dist;*/
 
 
             segments = GetSegments_By_MetodoDeLasPendientesContrarias(samples, info, min_dist);
@@ -61,10 +61,11 @@ namespace TrackAnalyzer
 
             int segment_id = 0;
 
-            // Get the slope of the first segment.            
-            var last_slope = (new Segmento() {Muestras = samples.GetRange(info[0].Item1, info[0].Item2)}).PendientePromedio;
+            double last_slope;
 
-
+            // Get the slope of the first segment. 
+            last_slope = (new Segmento() {Muestras = samples.GetRange(info[0].Item1, info[0].Item2)}).PendientePromedio;
+          
             foreach(var t in info)
             {
                 segment = new Segmento();
