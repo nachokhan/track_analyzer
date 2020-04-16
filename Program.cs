@@ -17,15 +17,15 @@ namespace Test
         {
             Console.WriteLine("Hello World!");
 
-            double MIN_DT = 4;
-            double MAX_DT = 10;
+            double MIN_DT = 1;
+            double MAX_DT = 5;
             int MIN_WIN = 3;
-            int MAX_WIN = 6;
-            int MIN_PERM = 200;
-            int MAX_PERM = 500;
+            int MAX_WIN = 8;
+            int MIN_PERM = 150;
+            int MAX_PERM = 450;
    
-            double INC_DT = 2;
-            int INC_WIN = 2;
+            double INC_DT = 1;
+            int INC_WIN = 1;
             int INC_PERM = 50;
 
             var a = (int) (MAX_DT-MIN_DT)/INC_DT + 1 ;
@@ -34,8 +34,10 @@ namespace Test
 
             Console.WriteLine("Atención: Se generaran {0} archivos por TRACK", a*b*c+1);
 
-            //HacerPruebas("other/perilago.gpx", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            HacerMuchasPruebas("perilago", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
             HacerMuchasPruebas("rincon1___", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            HacerMuchasPruebas("rincon2___", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            HacerMuchasPruebas("rocas", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
             //HacerPruebas("other/rincon1___.gpx");
 
             //ProbarDistancias
@@ -169,7 +171,7 @@ namespace Test
 
                             // GPX Visualizer
                             visualizationFile = String.Format("{4}/VIEW_{1:00}_{2:00}_{3:00}.txt", FileName, dt, win, perm, outputDirectory);
-                            // TrackFileSaver.WriteDown_SamplesForVisualize(segmentos, visualizationFile);
+                             TrackFileSaver.WriteDown_SamplesForVisualize(segmentos, visualizationFile);
                         }
                     }
                 }
