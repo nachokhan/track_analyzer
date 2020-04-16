@@ -17,7 +17,7 @@ namespace TrackAnalyzer
 
           
           /*  double dist = samples.Sum(m => m.Distancia);
-            min_dist = 0.00846 * dist;*/
+            min_dist = 0.0084 * dist;*/
 
 
             segments = GetSegments_By_MetodoDeLasPendientesContrarias(samples, info, min_dist);
