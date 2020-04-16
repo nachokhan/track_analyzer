@@ -14,7 +14,6 @@ namespace TrackAnalyzer.Logger
             string secondHeader = ",{0}_I, {0}_F, {0}_Ct"; 
             string mainBody = "{0}";
             string secondBody = ",{0},{1},{2}";
-            string alphabet = "ABCEFHIKLNOQRTUWXZ";
             string lastBody_01 = ", ,={0}";
             string lastBody_02 = " ${0}${1}-{2}{3} + ${4}${5}-{6}{7} +";
             string lastBody = "";
@@ -25,6 +24,8 @@ namespace TrackAnalyzer.Logger
          
             var ordered_list = combinations.Combinations.GroupBy(p => p.SegmentsCount).Select(p => p.ToList()).ToList();
 
+            int actual_combinationList = 0;
+            int perfect_row = 0;
             foreach (List<SegmentsListCombination> combinationList in ordered_list)
             {
                 int total_combinations = combinationList.Count;
@@ -42,32 +43,54 @@ namespace TrackAnalyzer.Logger
                     totalBody += String.Format(mainBody, combination.Name);
                     
                     lastBody = "";
-                    int alph_index = 1;
+                    int alph_index = 2;
                     actual_combination++;
                     foreach(SegmentInfo segment in combination.Segments)
                     {
-                        totalBody += String.Format(secondBody, segment.FirstSample, segment.LastSample, segment.SamplesCount);
-                        char letra1 = alphabet[alph_index++];
-                        char letra2 = alphabet[alph_index++];
+                        totalBody += String.Format(secondBody, segment.FirstSample, segment.LastSample, segment.SamplesCount);                        
+                        var letra1 = Alphabet(alph_index);
+                        var letra2 = Alphabet(alph_index+1);
                         lastBody += string.Format(lastBody_02, 
-                            letra1, total_combinations+5, letra1, actual_combination, 
-                            letra2, total_combinations+5, letra2, actual_combination);
+                            letra1, total_combinations+5 + actual_combinationList, letra1, actual_combination + actual_combinationList, 
+                            letra2, total_combinations+5 + actual_combinationList, letra2, actual_combination + actual_combinationList);
+                        
+                        alph_index+=3;
                     }
                     lastBody = lastBody.Remove(lastBody.Count()-1);
                     lastBody = string.Format(lastBody_01, lastBody);
-                    totalBody += lastBody + "\n";
+                    totalBody += lastBody + "\n";                   
                 }
-                totalText += totalHeader + "\n" + totalBody + "\n\n\n";
+                totalText += totalHeader + "\n" + totalBody + "\n";
 
-                // Ingresar PERFECTO
-                totalText += "\n";
+                // Ingresar HEADER PERFECTO
+                totalText += "Perfecto:\n";
                 totalText += totalHeader + "\n";
-                totalText += "\n\n";
-
+                //INGRESAR BODY PERFECTO
+                actual_combinationList += 1 + total_combinations +  7;
+                perfect_row = actual_combinationList - 5;
+                for (int i = 1; i <= segments_count*3+1; i++)
+                    totalText += String.Format("=INDIRECT(\"{0}\"&B${1}),", Alphabet(i), perfect_row);
+                    // =INDIRECT("C"&B85)
+                totalText += "\n\n\n\n";
+                
             }
 
             System.IO.File.WriteAllText(FileName, totalText);
 
+        }
+
+        public static string Alphabet(int column)
+        {
+            string columnString = "";
+            decimal columnNumber = column;
+            while (columnNumber > 0)
+            {
+                decimal currentLetterNumber = (columnNumber - 1) % 26;
+                char currentLetter = (char)(currentLetterNumber + 65);
+                columnString = currentLetter + columnString;
+                columnNumber = (columnNumber - (currentLetterNumber + 1)) / 26;
+            }
+            return columnString;
         }
 
         public static void WriteDown_SamplesForVisualize(List<Segmento> segments, string fileName)
