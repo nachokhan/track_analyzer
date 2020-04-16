@@ -32,7 +32,7 @@ namespace TrackAnalyzer
 
             Distancia = System.Math.Sqrt(Delta_X_2+Delta_Y_2);
 
-            var X = System.Math.Sqrt(Delta_X_2 - Delta_Y_2);
+            var X = System.Math.Sqrt( System.Math.Abs(Delta_X_2 - Delta_Y_2) );
 
             Pendiente = Delta_Y / X * 100;
            
