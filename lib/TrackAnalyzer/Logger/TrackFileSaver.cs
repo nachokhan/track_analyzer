@@ -97,7 +97,8 @@ namespace TrackAnalyzer.Logger
         {
             const string segmentHeader = "type,latitude,longitude,alt,name,color\n";
 
-            string segmentText;
+            string segmentText;                             // Para generar todo el track completo
+            string partial_segment_text = "";               // Para generar segmentos aislados
 
             List<string> colors = new List<string>()
                 {"green","red","blue","black","orange","yellow","grey","brown"}; 
@@ -108,14 +109,12 @@ namespace TrackAnalyzer.Logger
             int max_segments = 9;
             int max_samples = 130;
             int samples_count = 0;
-            string partial_segment_text = "";
+            
             int index_barra = fileName.LastIndexOf('/');
             int index_punto = fileName.LastIndexOf('.');
             string nombre = fileName.Substring(index_barra+1, index_punto-index_barra-1);
             String outputDirectory = fileName.Substring(0, index_barra) + "/VIEWS/" + nombre +"/";
             Directory.CreateDirectory(outputDirectory);
-
-
 
             segmentText = "";
 
@@ -136,6 +135,7 @@ namespace TrackAnalyzer.Logger
                         m.P2.Longitude,
                         m.Elevacion,
                         s.Name, colors[nextColor]);
+
                     samples_count++;
                 }
 
@@ -143,7 +143,8 @@ namespace TrackAnalyzer.Logger
                 if(nextColor >= colors.Count)
                     nextColor = 0;
 
-
+                // Cada 'max_segments' o cada 'max_samples' generamos un nuevo archivo 
+                // para limitar la cantidad de puntos que vemos
                 if( max_segments == 0 || samples_count >= max_samples)
                 {                    
                     var fn = String.Format("{0}/_{1:00}.txt", outputDirectory, file_counter++);

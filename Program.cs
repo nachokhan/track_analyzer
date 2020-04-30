@@ -17,8 +17,8 @@ namespace Test
         {
             Console.WriteLine("Hello World!");
 
-            double MIN_DT = 1;
-            double MAX_DT = 5;
+            double MIN_DT = 5;
+            double MAX_DT = 7;
             int MIN_WIN = 3;
             int MAX_WIN = 8;
             int MIN_PERM = 150;
@@ -34,14 +34,16 @@ namespace Test
 
             Console.WriteLine("Atención: Se generaran {0} archivos por TRACK", a*b*c+1);
 
-            HacerMuchasPruebas("perilago", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
-            HacerMuchasPruebas("rincon1___", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
-            HacerMuchasPruebas("rincon2___", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
-            HacerMuchasPruebas("rocas", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            //HacerMuchasPruebas("arco_down", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            HacerMuchasPruebas("larry", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            HacerMuchasPruebas("cristo", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            //HacerMuchasPruebas("rocas", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
+            //HacerMuchasPruebas("subidapotre", MIN_DT, MAX_DT, MIN_WIN, MAX_WIN, MIN_PERM, MAX_PERM, INC_DT, INC_WIN, INC_PERM);
             //HacerPruebas("other/rincon1___.gpx");
 
             //ProbarDistancias
         }
+    
 
         private static List<Muestra> Read_XML(string FileName)
         {
@@ -120,7 +122,7 @@ namespace Test
             Console.WriteLine("TRACK NAME: " + a);
 
             string visualizationFile;
-            string informationFile;
+            //string informationFile;
 
             int samples_01_initial = all_muestras.Count;
             int samples_02_withourDTs = 0;
@@ -147,14 +149,14 @@ namespace Test
                     
                     combinations_Body += String.Format("{0},{1},{2},{3}\n", dt, win, 0, segmentos.Count);
                         
-                    // GPX Visualizer
-                    visualizationFile = String.Format("{4}/_VIEW_{1:00}_{2:00}_{3:00}.txt", FileName, dt, win, 0, outputDirectory);
-                    TrackFileSaver.WriteDown_SamplesForVisualize(segmentos, visualizationFile);                        
+                    // Files for "GPX Visualizer"
+                    //visualizationFile = String.Format("{4}/_VIEW_{1:00}_{2:00}_{3:00}.txt", FileName, dt, win, 0, outputDirectory);
+                    //TrackFileSaver.WriteDown_SamplesForVisualize(segmentos, visualizationFile);                        
 
                     // Excel ANALYSIS
-                    informationFile = String.Format("{3}/INFO_{1:00}_{2:00}_00.txt", FileName, dt, win, outputDirectory);                    
-                    TrackFileSaver.WriteDown_SamplesInfo(segmentos, informationFile + "_SAMPLES");
-                    TrackFileSaver.WriteDown_SegmentsInfo(segmentos, informationFile + "_SEGMENTS" );
+                    //informationFile = String.Format("{3}/INFO_{1:00}_{2:00}_00.txt", FileName, dt, win, outputDirectory);                    
+                    //TrackFileSaver.WriteDown_SamplesInfo(segmentos, informationFile + "_SAMPLES");
+                    //TrackFileSaver.WriteDown_SegmentsInfo(segmentos, informationFile + "_SEGMENTS" );
 
 
                     for (int perm = min_per; perm <= max_per; perm += inc_per)
@@ -168,9 +170,10 @@ namespace Test
                         if(segmentos.Count < 15)
                         {                            
                             combinations_Body += String.Format("{0},{1},{2},{3}\n", dt, win, perm, segmentos.Count);
-
-                            // GPX Visualizer
-                            visualizationFile = String.Format("{4}/VIEW_{1:00}_{2:00}_{3:00}.txt", FileName, dt, win, perm, outputDirectory);
+                            
+                            // Files for "GPX Visualizer"
+                            string segmentsDirectory = String.Format("{0:00}", segmentos.Count);
+                            visualizationFile = String.Format("{4}/{5}/VIEW_{1:00}_{2:00}_{3:00}.txt", FileName, dt, win, perm, outputDirectory, segmentsDirectory);
                              TrackFileSaver.WriteDown_SamplesForVisualize(segmentos, visualizationFile);
                         }
                     }

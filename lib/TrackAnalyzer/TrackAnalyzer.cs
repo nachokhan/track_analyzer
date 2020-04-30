@@ -101,6 +101,7 @@ namespace TrackAnalyzer
             return segments;
         }
 
+        /// If a segment has less than 'error' samples, it will be meshed with the previous one
         private static List<Tuple<int, int>> Filter_SlopeChangesPositions(List<Tuple<int, int>> positions, double error=0)
         {
             List<Tuple<int, int>> new_positions = new List<Tuple<int, int>>();
@@ -134,7 +135,8 @@ namespace TrackAnalyzer
             return new_positions;
         }
 
-        private static List<Tuple<int, int>> Get_SlopeChangesPositions(List<Muestra> samples)
+        // divide in postive/negative slope segments (alternatively)
+        private static List<Tuple<int, int>> Get_SlopeChangesPositions(List<Muestra> samples)   
         {
             List<Tuple<int, int>> positions = new List<Tuple<int, int>>();
             eTipoPendiente prev_slope, actual_slope;
